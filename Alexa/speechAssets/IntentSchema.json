@@ -1,0 +1,52 @@
+{
+  "intents": [
+    {
+      "intent": "PresetIntent",
+      "slots": [
+        {
+          "name": "PresetName",
+          "type": "PRESETS"
+        }
+      ]
+    },
+    {
+      "intent": "SleepTimerIntent",
+      "slots": [
+        {
+          "name": "TimerLength",
+          "type": "AMAZON.NUMBER"
+        }
+      ]
+    },
+    {
+      "intent": "RoomVolUpIntent",
+      "slots": [
+        {
+          "name": "RoomName",
+          "type": "ROOMS"
+        }
+      ]
+    },
+    {
+      "intent": "RoomVolDownIntent",
+      "slots": [
+        {
+          "name": "RoomName",
+          "type": "ROOMS"
+        }
+      ]
+    },
+    {
+      "intent": "PauseIntent",
+      "slots": []
+    },
+    {
+      "intent": "ResumeIntent",
+      "slots": []
+    },
+    {
+      "intent": "HelpIntent",
+      "slots": []
+    }
+  ]
+}

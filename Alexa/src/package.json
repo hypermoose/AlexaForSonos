@@ -1,0 +1,9 @@
+{
+  "name": "alexa-sonos",
+  "description": "Alexa Skill for Sonos",
+  "version": "0.0.1",
+  "private": false,
+  "dependencies": {
+    "request": "*"
+  }
+}

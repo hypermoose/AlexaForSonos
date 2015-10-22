@@ -1,0 +1,14 @@
+﻿{
+  "test": {
+    "players": [
+      {
+        "roomName": "Office",
+        "volume": 15
+      }
+    ],
+    "state": "playing",
+    "favorite": "My Sonos Favorite",
+    "playMode": "NORMAL",
+    "pauseOthers": false
+  }
+}
