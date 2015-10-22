@@ -11,11 +11,11 @@ Once you are all setup with devices and accounts please clone this repo and foll
 - Clone and setup node-sonos-http-api on your machine and ensure that its accessible via the internet by typing http://<your host name>:5005/zones.  If it worked you should see all your Sonos devices in the resulting XML.  If not I would read more of the node-sonos-http-api's README file.
 - Go to the Alexa dev site and create a new skill.  Use the files in the Alexa\speechAssets subdirectory to populate the appropriate fields in the web ui.  Use whatever invocation name you want but I use "Sonos".
 - Create custom slot types called ROOMS and PRESETS.  Change the values in those slots to be the names of your Sonos devices and the PRESET names to be whatever presets you want to setup.
-- Go back to your node-sonos-http-api machine and copy my presets/presets.json file to the root directory of node-sonos-http-api.  Change the json to define your presets which allow you to group different Sonos devices and then define what Sonos favorite you want to play and at what volumes.  Its a very nice feature of node-sonos-http.
+- Go back to your node-sonos-http-api machine and copy my presets/presets.json file to the root directory of node-sonos-http-api.  Change the json to define your presets which allow you to group different Sonos devices and then define what Sonos favorite you want to play and at what volumes.  Its a very nice feature of node-sonos-http.  Remember to restart node-sonos-http-api after changing the file
 - Before you save your Alexa Skill you need to now log into the AWS portal and create a Lamba function.
 - My code is in the src folder.  You will need to edit index.js to define the URL for node-sonos-http and define the Alexa Skill appid from your Alexa dev portal.
-- Run npm install in the src folder to get the request node_module copied down
-- Next zip up the src folder and upload it to the AWS portal.  don't include the src folder itself
+- Run npm install in the Alexa/src folder to get the request node_module copied down
+- Next zip up the Alexa/src folder and upload it to the AWS portal.  don't include the src folder itself
 - Lastly, udpate the Alexa Skill with the Lambda url for your new Lambda function.
 
 PHEW, alot of work but what you should get is Alexa support for Sonos to do the following things:
