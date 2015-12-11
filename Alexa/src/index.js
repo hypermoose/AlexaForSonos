@@ -12,11 +12,38 @@ var APP_ID = "*** CHANGE TO YOUR SKILL APP ID ***";
 var SONOS_URL = "*** CHANGE TO THE FULL URL FOR YOUR INTERNET VISIBLE SERVER RUNNING node-sonos-http-api***";
 var AlexaSkill = require('./AlexaSkill');
 var request = require('request');
- 
+
 // Set the headers
 var headers = {
-    'User-Agent':       'Alexa/0.0.1',
-    'Content-Type':     'application/x-www-form-urlencoded'
+    'User-Agent': 'Alexa/0.0.1',
+    'Content-Type': 'application/x-www-form-urlencoded'
+}
+
+// Parse zones information
+var parseZones = function (zones) {
+
+    var rooms = [];
+    var playing = "nothing is currently playing";
+
+    zones.forEach(function (zone) {
+        var name = zone.coordinator.roomName;
+        rooms.push(name);
+
+        var members = zone.members;
+        members.forEach(function (member) {
+            if (rooms.indexOf(member.roomName) == -1) {
+                rooms.push(member.roomName);
+            }
+        });
+        var state = zone.coordinator.state.zoneState;
+        if (state == "PLAYING") {
+            var track = zone.coordinator.state.currentTrack;
+            playing = name + " is playing " + track.title + " by " + track.artist + " at volume " +
+              zone.coordinator.groupState.volume;
+        }
+    });
+
+    return playing;
 }
 
 /**
@@ -55,17 +82,17 @@ Sonos.prototype.eventHandlers.onSessionEnded = function (sessionEndedRequest, se
 Sonos.prototype.intentHandlers = {
     // register custom intent handlers
     PresetIntent: function (intent, session, response) {
-        
+
         var presetName = intent.slots.PresetName;
-        
-        if (presetName && presetName.value) {  
-            
+
+        if (presetName && presetName.value) {
+
             var options = {
                 url: SONOS_URL + "preset/" + presetName.value,
                 method: 'GET',
                 headers: headers
             }
-            
+
             console.log("Sending request " + options.url);
             // Start the request
             request(options, function (error, result, body) {
@@ -81,47 +108,57 @@ Sonos.prototype.intentHandlers = {
         }
     },
     SleepTimerIntent: function (intent, session, response) {
-        
+
         var timerLength = intent.slots.TimerLength;
-        
-        if (timerLength && timerLength.value) {
-            
+        var roomName = intent.slots.RoomName;
+
+        if (timerLength && timerLength.value &&
+          roomName && roomName.value) {
+
             var asSeconds = parseInt(timerLength.value, 10) * 60 * 60;
-            
+
             var options = {
-                url: SONOS_URL + "sleep/" + asSeconds.toString(),
+                url: SONOS_URL + roomName.value + "/sleep/" + asSeconds.toString(),
                 method: 'GET',
                 headers: headers
             }
-            
-            console.log("Sending request " + options.url);
-            // Start the request
             request(options, function (error, result, body) {
                 if (!error && result.statusCode == 200) {
-                    // Print out the response body
-                    response.tell("timer set");
+                    response.ask("timer set to " + timerLength.value, "");
                 } else {
                     response.tell("Sorry, could not start timer");
                 }
             });
         } else {
-            response.tell("Sorry, You must specify a valid timer length in hours");
+            response.tell("Sorry, You must specify a valid room and timer length in hours");
         }
     },
     RoomVolUpIntent: function (intent, session, response) {
-        
+
         var roomName = intent.slots.RoomName;
-        
+
         if (roomName && roomName.value) {
-            
+
             var options = {
-                url: SONOS_URL + roomName.value + "/volume/+5",
+                url: SONOS_URL + roomName.value + "/volume/+10",
                 method: 'GET',
                 headers: headers
             }
             request(options, function (error, result, body) {
                 if (!error && result.statusCode == 200) {
-                    response.ask("","");
+                    var options = {
+                        url: SONOS_URL + roomName.value + "/state",
+                        method: 'GET',
+                        headers: headers
+                    }
+                    request(options, function (error, result, body) {
+                        if (!error && result.statusCode == 200) {
+                            var state = JSON.parse(body);
+                            response.ask("Volume is now " + state.volume, "");
+                        } else {
+                            response.tell("Sorry, could not increase the volume");
+                        }
+                    });
                 } else {
                     response.tell("Sorry, could not increase the volume");
                 }
@@ -131,19 +168,31 @@ Sonos.prototype.intentHandlers = {
         }
     },
     RoomVolDownIntent: function (intent, session, response) {
-        
+
         var roomName = intent.slots.RoomName;
-        
+
         if (roomName && roomName.value) {
-            
+
             var options = {
-                url: SONOS_URL + roomName.value + "/volume/-5",
+                url: SONOS_URL + roomName.value + "/volume/-10",
                 method: 'GET',
                 headers: headers
             }
             request(options, function (error, result, body) {
                 if (!error && result.statusCode == 200) {
-                    response.ask("","");
+                    var options = {
+                        url: SONOS_URL + roomName.value + "/state",
+                        method: 'GET',
+                        headers: headers
+                    }
+                    request(options, function (error, result, body) {
+                        if (!error && result.statusCode == 200) {
+                            var state = JSON.parse(body);
+                            response.ask("Volume is now " + state.volume, "");
+                        } else {
+                            response.tell("Sorry, could not decrease the volume");
+                        }
+                    });
                 } else {
                     response.tell("Sorry, could not decrease the volume");
                 }
@@ -160,7 +209,7 @@ Sonos.prototype.intentHandlers = {
         }
         request(options, function (error, result, body) {
             if (!error && result.statusCode == 200) {
-                response.ask("", "");
+                response.ask("Paused", "");
             } else {
                 response.tell("Sorry, could not pause");
             }
@@ -174,16 +223,147 @@ Sonos.prototype.intentHandlers = {
         }
         request(options, function (error, result, body) {
             if (!error && result.statusCode == 200) {
-                response.tell("");
+                response.ask("Resuming", "");
             } else {
                 response.tell("Sorry, could not resume");
             }
         });
     },
+    WhatsPlayingIntent: function (intent, session, response) {
+        var options = {
+            url: SONOS_URL + "zones",
+            method: 'GET',
+            headers: headers
+        }
+        request(options, function (error, result, body) {
+            if (!error && result.statusCode == 200) {
+                var status = parseZones(JSON.parse(body));
+                response.ask(status, "");
+            } else {
+                response.tell("Sorry, could not get Sonos zones information");
+            }
+        });
+    },
     HelpIntent: function (intent, session, response) {
-        response.ask("You can say play preset followed by the preset name", 
-            "You can say play preset followed by the preset name");
-    }
+        var helpMsg = "You can play presets, change volume and ask what's playing";
+        response.ask(helpMsg, helpMsg);
+    },
+    GroupIntent: function (intent, session, response) {
+        var roomName = intent.slots.RoomName;
+        var groupRoomName = intent.slots.GroupRoomName;
+
+        if (roomName && roomName.value &&
+          groupRoomName && groupRoomName.value) {
+
+            var options = {
+                url: SONOS_URL + groupRoomName.value + "/add/" + roomName.value,
+                method: 'GET',
+                headers: headers
+            }
+            request(options, function (error, result, body) {
+                if (!error && result.statusCode == 200) {
+                    response.ask("", "");
+                } else {
+                    response.tell("Sorry, could not add " + roomName.value + " to group " + groupRoomName.value);
+                }
+            });
+        } else {
+            response.tell("Sorry, You must specify a valid room name and group room name");
+        }
+    },
+    UngroupIntent: function (intent, session, response) {
+        var roomName = intent.slots.RoomName;
+
+        if (roomName && roomName.value) {
+
+            var options = {
+                url: SONOS_URL + roomName.value + "/leave/",
+                method: 'GET',
+                headers: headers
+            }
+            request(options, function (error, result, body) {
+                if (!error && result.statusCode == 200) {
+                    response.ask("", "");
+                } else {
+                    response.tell("Sorry, could not ungroup " + roomName.value);
+                }
+            });
+        } else {
+            response.tell("Sorry, You must specify a valid room name");
+        }
+    },
+    FavoriteIntent: function (intent, session, response) {
+
+        var roomName = intent.slots.RoomName;
+        var favoriteName = intent.slots.FavoriteName;
+
+        if (favoriteName && favoriteName.value
+          && roomName && roomName.value) {
+
+            // Grab the favorites
+            var options = {
+                url: SONOS_URL + "favorites",
+                method: 'GET',
+                headers: headers
+            }
+
+            request(options, function (error, result, body) {
+                if (!error && result.statusCode == 200) {
+                    var validFavorites = JSON.parse(body);
+                    var match = findClosestStringMatch(favoriteName.value, validFavorites);
+                    if (match) {
+                        var options = {
+                            url: SONOS_URL + roomName + "/favorite/" + match,
+                            method: 'GET',
+                            headers: headers
+                        }
+
+                        // Start the request
+                        request(options, function (error, result, body) {
+                            if (!error && result.statusCode == 200) {
+                                // Print out the response body
+                                response.ask("Starting favorite " + match + " because you said " + favoriteName.value, "");
+                            } else {
+                                response.tell("Sorry, could not start favorite " + match);
+                            }
+                        });
+                    } else {
+                        response.ask("Sorry could not find a favorite called " + favoriteName.value);
+                    }
+                } else {
+                    response.tell("Sorry, could not get the list of favorites from Sonos");
+                }
+            });
+        } else {
+            response.tell("Sorry, You must specify a valid favorite name");
+        }
+    },
+    VolumeIntent: function (intent, session, response) {
+
+        var volume = intent.slots.Volume;
+        var roomName = intent.slots.RoomName;
+
+        if (volume && volume.value &&
+          roomName && roomName.value) {
+
+            var options = {
+                url: SONOS_URL + roomName.value + "/volume/" + volume.value,
+                method: 'GET',
+                headers: headers
+            }
+
+            // Start the request
+            request(options, function (error, result, body) {
+                if (!error && result.statusCode == 200) {
+                    response.ask("volume set to " + volume.value, "");
+                } else {
+                    response.tell("Sorry, could not set volume");
+                }
+            });
+        } else {
+            response.tell("Sorry, You must specify a valid room and volume");
+        }
+    },
 };
 
 // Create the handler that responds to the Alexa Request.

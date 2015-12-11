@@ -13,6 +13,10 @@
       "intent": "SleepTimerIntent",
       "slots": [
         {
+          "name": "RoomName",
+          "type": "ROOMS"
+        },
+        {
           "name": "TimerLength",
           "type": "AMAZON.NUMBER"
         }
@@ -37,12 +41,64 @@
       ]
     },
     {
+      "intent": "GroupIntent",
+      "slots": [
+        {
+          "name": "RoomName",
+          "type": "ROOMS"
+        },
+        {
+          "name": "GroupRoomName",
+          "type": "ROOMS"
+        }
+      ]
+    },
+    {
+      "intent": "UngroupIntent",
+      "slots": [
+        {
+          "name": "RoomName",
+          "type": "ROOMS"
+        }
+      ]
+    },
+    {
       "intent": "PauseIntent",
       "slots": []
     },
     {
       "intent": "ResumeIntent",
       "slots": []
+    },
+    {
+      "intent": "WhatsPlayingIntent",
+      "slots": []
+    },
+    {
+      "intent": "FavoriteIntent",
+      "slots": [
+        {
+          "name": "RoomName",
+          "type": "ROOMS"
+        },
+        {
+          "name": "FavoriteName",
+          "type": "FAVORITES"
+        }
+      ]
+    },
+    {
+      "intent": "VolumeIntent",
+      "slots": [
+        {
+          "name": "RoomName",
+          "type": "ROOMS"
+        },
+        {
+          "name": "Volume",
+          "type": "AMAZON.NUMBER"
+        }
+      ]
     },
     {
       "intent": "HelpIntent",

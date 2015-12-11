@@ -1,10 +1,10 @@
 PresetIntent play preset {PresetName}
 PresetIntent preset {PresetName}
 
-SleepTimerIntent set sleep timer for {TimerLength} hours
-SleepTimerIntent set sleep timer for {TimerLength} hour
-SleepTimerIntent set timer for {TimerLength} hours
-SleepTimerIntent set timer for {TimerLength} hour
+SleepTimerIntent set {RoomName} sleep timer for {TimerLength} hours
+SleepTimerIntent set {RoomName} sleep timer for {TimerLength} hour
+SleepTimerIntent set {RoomName} timer for {TimerLength} hours
+SleepTimerIntent set {RoomName} timer for {TimerLength} hour
 
 RoomVolUpIntent {RoomName} volume up
 RoomVolDownIntent {RoomName} volume down
@@ -13,6 +13,22 @@ PauseIntent pause
 PauseIntent pause all
 
 ResumeIntent resume
+
+WhatsPlayingIntent what's playing
+WhatsPlayingIntent what is playing
+WhatsPlayingIntent status
+
+UngroupIntent ungroup {RoomName}
+UngroupIntent isolate {RoomName}
+
+GroupIntent add {RoomName} to {GroupRoomName}
+
+FavoriteIntent {RoomName} play favorite {FavoriteName}
+FavoriteIntent {RoomName} favorite {FavoriteName}
+
+VolumeIntent {RoomName} volume {Volume} 
+VolumeIntent {RoomName} set volume to {Volume} 
+VolumeIntent {RoomName} set volume {Volume} 
 
 HelpIntent help
 HelpIntent help me
