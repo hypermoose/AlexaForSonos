@@ -1,9 +1,11 @@
 {
-  "name": "alexa-sonos",
-  "description": "Alexa Skill for Sonos",
-  "version": "0.0.1",
-  "private": false,
+  "name": "AlexaForSonos",
+  "description": "Sonos control for Amazon Echo",
+  "engines": {
+    "node": ">=0.4.10"
+  },
   "dependencies": {
-    "request": "*"
+    "natural": ">= 0.2.1",
+    "request": ">= 2.65.0"
   }
 }

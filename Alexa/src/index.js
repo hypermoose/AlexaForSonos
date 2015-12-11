@@ -12,6 +12,7 @@ var APP_ID = "*** CHANGE TO YOUR SKILL APP ID ***";
 var SONOS_URL = "*** CHANGE TO THE FULL URL FOR YOUR INTERNET VISIBLE SERVER RUNNING node-sonos-http-api***";
 var AlexaSkill = require('./AlexaSkill');
 var request = require('request');
+var natural = require('natural');
 
 // Set the headers
 var headers = {
@@ -19,32 +20,49 @@ var headers = {
     'Content-Type': 'application/x-www-form-urlencoded'
 }
 
-// Parse zones information
-var parseZones = function (zones) {
+// Find closest match
+var findClosestStringMatch = function (str, possibles) {
+  var match = null;
+  var best = 0;
+  
+  possibles.every(function (possible) {
+    var d = natural.JaroWinklerDistance(str, possible);
+    if (d > best) {
+      best = d;
+      match = possible;
+    }
+    return best != 1;
+  });
+  
+  return match;
+};
 
+// Parse zones information
+var parseZones = function(zones) {
+  
     var rooms = [];
     var playing = "nothing is currently playing";
-
+  
     zones.forEach(function (zone) {
         var name = zone.coordinator.roomName;
         rooms.push(name);
-
-        var members = zone.members;
+    
+    var members = zone.members; 
         members.forEach(function (member) {
             if (rooms.indexOf(member.roomName) == -1) {
-                rooms.push(member.roomName);
+        rooms.push(member.roomName); 
             }
         });
         var state = zone.coordinator.state.zoneState;
         if (state == "PLAYING") {
             var track = zone.coordinator.state.currentTrack;
-            playing = name + " is playing " + track.title + " by " + track.artist + " at volume " +
+      playing = name + " is playing " + track.title + " by " + track.artist + " at volume " + 
               zone.coordinator.groupState.volume;
         }
     });
-
+  
     return playing;
-}
+} 
 
 /**
  * Sonos is a child of AlexaSkill.
@@ -82,25 +100,43 @@ Sonos.prototype.eventHandlers.onSessionEnded = function (sessionEndedRequest, se
 Sonos.prototype.intentHandlers = {
     // register custom intent handlers
     PresetIntent: function (intent, session, response) {
-
+    
         var presetName = intent.slots.PresetName;
-
+    
         if (presetName && presetName.value) {
-
+      
+      // Grab the presets
+      var options = {
+        url: SONOS_URL + "preset",
+        method: 'GET',
+        headers: headers
+      }
+      
+      request(options, function (error, result, body) {
+        if (!error && result.statusCode == 200) {
+          var validPresets = JSON.parse(body);
+          var match = findClosestStringMatch(presetName.value, validPresets);
+          if (match) {
             var options = {
-                url: SONOS_URL + "preset/" + presetName.value,
+              url: SONOS_URL + "preset/" + match,
                 method: 'GET',
                 headers: headers
             }
-
-            console.log("Sending request " + options.url);
+            
             // Start the request
             request(options, function (error, result, body) {
                 if (!error && result.statusCode == 200) {
                     // Print out the response body
-                    response.ask("Starting preset " + presetName.value, "");
+                response.ask("Starting preset " + match + " because you said " + presetName.value, "");
                 } else {
-                    response.tell("Sorry, could not start preset " + presetName.value);
+                response.tell("Sorry, could not start preset " + match);
+              }
+            });
+          } else {
+            response.ask("Sorry could not find a preset called " + presetName.value);
+          }
+        } else {
+          response.tell("Sorry, could not get the list of presets from Sonos");
                 }
             });
         } else {
@@ -108,15 +144,15 @@ Sonos.prototype.intentHandlers = {
         }
     },
     SleepTimerIntent: function (intent, session, response) {
-
+    
         var timerLength = intent.slots.TimerLength;
         var roomName = intent.slots.RoomName;
-
+    
         if (timerLength && timerLength.value &&
           roomName && roomName.value) {
-
+      
             var asSeconds = parseInt(timerLength.value, 10) * 60 * 60;
-
+      
             var options = {
                 url: SONOS_URL + roomName.value + "/sleep/" + asSeconds.toString(),
                 method: 'GET',
