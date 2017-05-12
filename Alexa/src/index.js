@@ -53,7 +53,7 @@ var parseZones = function(zones) {
         rooms.push(member.roomName); 
             }
         });
-        var state = zone.coordinator.state.zoneState;
+    var state = zone.coordinator.state.playbackState;
         if (state == "PLAYING") {
             var track = zone.coordinator.state.currentTrack;
       playing = name + " is playing " + track.title + " by " + track.artist + " at volume " + 
@@ -79,7 +79,7 @@ Sonos.prototype = Object.create(AlexaSkill.prototype);
 Sonos.prototype.constructor = Sonos;
 
 Sonos.prototype.eventHandlers.onSessionStarted = function (sessionStartedRequest, session) {
-    console.log("Sonos onSessionStarted requestId: " + sessionStartedRequest.requestId
+  console.log("Sonos onSessionStarted requestId: " + sessionStartedRequest.requestId 
         + ", sessionId: " + session.sessionId);
     // any initialization logic goes here
 };
@@ -92,7 +92,7 @@ Sonos.prototype.eventHandlers.onLaunch = function (launchRequest, session, respo
 };
 
 Sonos.prototype.eventHandlers.onSessionEnded = function (sessionEndedRequest, session) {
-    console.log("Sonos onSessionEnded requestId: " + sessionEndedRequest.requestId
+  console.log("Sonos onSessionEnded requestId: " + sessionEndedRequest.requestId 
         + ", sessionId: " + session.sessionId);
     // any cleanup logic goes here
 };
@@ -170,11 +170,11 @@ Sonos.prototype.intentHandlers = {
         }
     },
     RoomVolUpIntent: function (intent, session, response) {
-
+    
         var roomName = intent.slots.RoomName;
-
+    
         if (roomName && roomName.value) {
-
+      
             var options = {
                 url: SONOS_URL + roomName.value + "/volume/+10",
                 method: 'GET',
@@ -194,7 +194,7 @@ Sonos.prototype.intentHandlers = {
                         } else {
                             response.tell("Sorry, could not increase the volume");
                         }
-                    });
+          });          
                 } else {
                     response.tell("Sorry, could not increase the volume");
                 }
@@ -204,11 +204,11 @@ Sonos.prototype.intentHandlers = {
         }
     },
     RoomVolDownIntent: function (intent, session, response) {
-
+    
         var roomName = intent.slots.RoomName;
-
+    
         if (roomName && roomName.value) {
-
+      
             var options = {
                 url: SONOS_URL + roomName.value + "/volume/-10",
                 method: 'GET',
@@ -228,7 +228,7 @@ Sonos.prototype.intentHandlers = {
                         } else {
                             response.tell("Sorry, could not decrease the volume");
                         }
-                    });
+          });          
                 } else {
                     response.tell("Sorry, could not decrease the volume");
                 }
@@ -272,8 +272,8 @@ Sonos.prototype.intentHandlers = {
             headers: headers
         }
         request(options, function (error, result, body) {
-            if (!error && result.statusCode == 200) {
-                var status = parseZones(JSON.parse(body));
+      if (!error && result.statusCode == 200) {       
+        var status = parseZones(JSON.parse(body));  
                 response.ask(status, "");
             } else {
                 response.tell("Sorry, could not get Sonos zones information");
@@ -287,10 +287,10 @@ Sonos.prototype.intentHandlers = {
     GroupIntent: function (intent, session, response) {
         var roomName = intent.slots.RoomName;
         var groupRoomName = intent.slots.GroupRoomName;
-
+    
         if (roomName && roomName.value &&
           groupRoomName && groupRoomName.value) {
-
+      
             var options = {
                 url: SONOS_URL + groupRoomName.value + "/add/" + roomName.value,
                 method: 'GET',
@@ -298,7 +298,7 @@ Sonos.prototype.intentHandlers = {
             }
             request(options, function (error, result, body) {
                 if (!error && result.statusCode == 200) {
-                    response.ask("", "");
+                    response.ask(roomName.value + " added to " + groupRoomName.value, "");
                 } else {
                     response.tell("Sorry, could not add " + roomName.value + " to group " + groupRoomName.value);
                 }
@@ -309,9 +309,9 @@ Sonos.prototype.intentHandlers = {
     },
     UngroupIntent: function (intent, session, response) {
         var roomName = intent.slots.RoomName;
-
+    
         if (roomName && roomName.value) {
-
+      
             var options = {
                 url: SONOS_URL + roomName.value + "/leave/",
                 method: 'GET',
@@ -319,7 +319,7 @@ Sonos.prototype.intentHandlers = {
             }
             request(options, function (error, result, body) {
                 if (!error && result.statusCode == 200) {
-                    response.ask("", "");
+                    response.ask(roomName.value + " ungrouped", "");
                 } else {
                     response.tell("Sorry, could not ungroup " + roomName.value);
                 }
@@ -329,31 +329,35 @@ Sonos.prototype.intentHandlers = {
         }
     },
     FavoriteIntent: function (intent, session, response) {
-
+    
         var roomName = intent.slots.RoomName;
         var favoriteName = intent.slots.FavoriteName;
-
+    
+    if (!(roomName && roomName.value)) {
+      roomName = { value: "living room" };
+    }
+    
         if (favoriteName && favoriteName.value
           && roomName && roomName.value) {
-
+      
             // Grab the favorites
             var options = {
                 url: SONOS_URL + "favorites",
                 method: 'GET',
                 headers: headers
             }
-
+      
             request(options, function (error, result, body) {
                 if (!error && result.statusCode == 200) {
                     var validFavorites = JSON.parse(body);
                     var match = findClosestStringMatch(favoriteName.value, validFavorites);
                     if (match) {
                         var options = {
-                            url: SONOS_URL + roomName + "/favorite/" + match,
+                            url: SONOS_URL + roomName.value + "/favorite/" + match,
                             method: 'GET',
                             headers: headers
                         }
-
+            
                         // Start the request
                         request(options, function (error, result, body) {
                             if (!error && result.statusCode == 200) {
@@ -375,19 +379,19 @@ Sonos.prototype.intentHandlers = {
         }
     },
     VolumeIntent: function (intent, session, response) {
-
+    
         var volume = intent.slots.Volume;
         var roomName = intent.slots.RoomName;
-
+    
         if (volume && volume.value &&
           roomName && roomName.value) {
-
+      
             var options = {
                 url: SONOS_URL + roomName.value + "/volume/" + volume.value,
                 method: 'GET',
                 headers: headers
             }
-
+      
             // Start the request
             request(options, function (error, result, body) {
                 if (!error && result.statusCode == 200) {
@@ -400,6 +404,48 @@ Sonos.prototype.intentHandlers = {
             response.tell("Sorry, You must specify a valid room and volume");
         }
     },
+  StopIntent: function (intent, session, response) {
+    response.tell("");
+  },
+  CancelIntent: function (intent, session, response) {
+    response.tell("");
+  },
+  ThanksIntent: function (intent, session, response) {
+      var myArray = ['Your welcome', 'No problem', 'Sure', "My pleasure", "It was nothing", "my pleasure", "It was nothing", "Alexa out!", "il vostro benvenuto"]; 
+      var rand = myArray[Math.floor(Math.random() * myArray.length)];
+      response.tell(rand);
+  },
+  ArtistIntent: function (intent, session, response) {
+
+      var roomName = intent.slots.RoomName;
+      var artistName = intent.slots.ArtistName;
+
+      if (!(roomName && roomName.value)) {
+          roomName = { value: "living room" };
+      }
+
+      if (artistName && artistName.value
+          && roomName && roomName.value) {
+
+          var options = {
+              url: SONOS_URL + roomName.value + "/musicsearch/spotify/station/" + artistName.value,
+              method: 'GET',
+              headers: headers
+          }
+
+          // Start the request
+          request(options, function (error, result, body) {
+              if (!error && result.statusCode == 200) {
+                  // Print out the response body
+                  response.ask("Starting radio " + artistName.value, "");
+              } else {
+                  response.tell("Sorry, could not start artist " + artistName.value);
+              }
+          });
+      } else {
+          response.tell("Sorry, You must specify a valid artist name");
+      }
+  }
 };
 
 // Create the handler that responds to the Alexa Request.

@@ -58,8 +58,12 @@ AlexaSkill.prototype.eventHandlers = {
      */
     onIntent: function (intentRequest, session, response) {
         var intent = intentRequest.intent,
-            intentName = intentRequest.intent.name,
-            intentHandler = this.intentHandlers[intentName];
+            intentName = intentRequest.intent.name;
+
+        // Remove any built in intent prefix
+        intentName = intentName.replace(/^AMAZON\./, '');
+  
+        var intentHandler = this.intentHandlers[intentName];
         if (intentHandler) {
             console.log('dispatch intent = ' + intentName);
             intentHandler.call(this, intent, session, response);

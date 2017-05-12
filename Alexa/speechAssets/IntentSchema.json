@@ -83,7 +83,7 @@
         },
         {
           "name": "FavoriteName",
-          "type": "FAVORITES"
+          "type": "AMAZON.LITERAL"
         }
       ]
     },
@@ -102,7 +102,32 @@
     },
     {
       "intent": "HelpIntent",
-      "slots": []
+      "slots": [ ]
+    },
+    {
+      "intent": "AMAZON.CancelIntent",
+      "slots": [ ]
+    },
+    {
+      "intent": "AMAZON.StopIntent",
+      "slots": [ ]
+    },
+    {
+      "intent": "ThanksIntent",
+      "slots": [ ]
+    },
+    {
+      "intent": "ArtistIntent",
+      "slots": [
+        {
+          "name": "RoomName",
+          "type": "ROOMS"
+        },
+        {
+          "name": "ArtistName",
+          "type": "AMAZON.LITERAL"
+        }
+      ]
     }
   ]
 }
