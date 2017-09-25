@@ -25,7 +25,7 @@ AlexaSkill.prototype.requestHandlers = {
     },
 
     IntentRequest: function (event, context, response) {
-        this.eventHandlers.onIntent.call(this, event.request, event.session, response);
+        this.eventHandlers.onIntent.call(this, event.request, event.session, event.context, response);
     },
 
     SessionEndedRequest: function (event, context) {
@@ -53,20 +53,39 @@ AlexaSkill.prototype.eventHandlers = {
         throw "onLaunch should be overriden by subclass";
     },
 
+    onDialog: function(intentRequest, dialogState, session, response) {
+        if (dialogState != "COMPLETED") {
+            response.sendDirectives("Dialog.Delegate");
+            return true;
+        } else {
+            return false;
+        }
+    },
+
     /**
      * Called when the user specifies an intent.
      */
-    onIntent: function (intentRequest, session, response) {
+    onIntent: function (intentRequest, session, context, response) {
+
+        console.log("Intent request = " + JSON.stringify(intentRequest) + " session = " + JSON.stringify(session));
         var intent = intentRequest.intent,
             intentName = intentRequest.intent.name;
 
         // Remove any built in intent prefix
         intentName = intentName.replace(/^AMAZON\./, '');
-  
+
+        // Check dialog state
+        var dialogState = intentRequest.dialogState;
+        if (dialogState) {
+            if (this.eventHandlers.onDialog(intent, dialogState, session, response)) {
+                return;
+            }
+        } 
+        
         var intentHandler = this.intentHandlers[intentName];
         if (intentHandler) {
             console.log('dispatch intent = ' + intentName);
-            intentHandler.call(this, intent, session, response);
+            intentHandler.call(this, intent, session, context, response);
         } else {
             throw 'Unsupported intent = ' + intentName;
         }
@@ -87,7 +106,7 @@ AlexaSkill.prototype.intentHandlers = {};
 
 AlexaSkill.prototype.execute = function (event, context) {
     try {
-        console.log("session applicationId: " + event.session.application.applicationId);
+        console.log("Request received: " + JSON.stringify(event));
 
         // Validate that this request originated from authorized source.
         /* OR DONT!!!
@@ -123,44 +142,54 @@ var Response = function (context, session) {
 Response.prototype = (function () {
     var buildSpeechletResponse = function (options) {
         var outputSpeech;
-        if (options.output && options.output.type === 'SSML') {
-            outputSpeech = {
-                type: options.output.type,
-                ssml: options.output.speech
-            };
-        } else {
-            outputSpeech = {
-                type: options.output.type || 'PlainText',
-                text: options.output.speech || options.output
-            };
-        }
-        var alexaResponse = {
-                outputSpeech: outputSpeech,
+        if (options.directives && !options.output) {
+            var alexaResponse = {
+                directives: options.directives,
                 shouldEndSession: options.shouldEndSession
-        };
-        if (options.reprompt) {
-            var outputRepromptSpeech;
-            if (options.reprompt && options.reprompt.type === 'SSML') {
-                outputRepromptSpeech = {
-                    type: options.reprompt.type,
-                    ssml: options.reprompt.speech
-                }
-            } else {
-                outputRepromptSpeech = {
-                    type: options.reprompt.type || 'PlainText',
-                    text: options.reprompt.speech || options.reprompt
-                }
             }
-            alexaResponse.reprompt = {
-                    outputSpeech: outputRepromptSpeech
+        } else {
+            if (options.output && options.output.type === 'SSML') {
+                outputSpeech = {
+                    type: options.output.type,
+                    ssml: options.output.speech
+                };
+            } else {
+                outputSpeech = {
+                    type: options.output.type || 'PlainText',
+                    text: options.output.speech || options.output
+                };
+            }
+            var alexaResponse = {
+                    outputSpeech: outputSpeech,
+                    shouldEndSession: options.shouldEndSession
             };
-        }
-        if (options.cardTitle && options.cardContent) {
-            alexaResponse.card = {
-                type: "Simple",
-                title: options.cardTitle,
-                content: options.cardContent
-            };
+            if (options.reprompt) {
+                var outputRepromptSpeech;
+                if (options.reprompt && options.reprompt.type === 'SSML') {
+                    outputRepromptSpeech = {
+                        type: options.reprompt.type,
+                        ssml: options.reprompt.speech
+                    }
+                } else {
+                    outputRepromptSpeech = {
+                        type: options.reprompt.type || 'PlainText',
+                        text: options.reprompt.speech || options.reprompt
+                    }
+                }
+                alexaResponse.reprompt = {
+                        outputSpeech: outputRepromptSpeech
+                };
+            }
+            if (options.cardTitle && options.cardContent) {
+                alexaResponse.card = {
+                    type: "Simple",
+                    title: options.cardTitle,
+                    content: options.cardContent
+                };
+            }
+            if (options.directives) {
+                alexaResponse.directives = options.directives;
+            }
         }
         var returnResult = {
                 version: '1.0',
@@ -169,6 +198,8 @@ Response.prototype = (function () {
         if (options.session && options.session.attributes) {
             returnResult.sessionAttributes = options.session.attributes;
         }
+
+        console.log("Returning: " + JSON.stringify(returnResult));
         return returnResult;
     };
 
@@ -197,6 +228,15 @@ Response.prototype = (function () {
                 shouldEndSession: false
             }));
         },
+        askWithDirectives: function (speechOutput, repromptSpeech, directives) {
+            this._context.succeed(buildSpeechletResponse({
+                session: this._session,
+                output: speechOutput,
+                reprompt: repromptSpeech,
+                directives: directives,
+                shouldEndSession: false
+            }));
+        },
         askWithCard: function (speechOutput, repromptSpeech, cardTitle, cardContent) {
             this._context.succeed(buildSpeechletResponse({
                 session: this._session,
@@ -206,6 +246,24 @@ Response.prototype = (function () {
                 cardContent: cardContent,
                 shouldEndSession: false
             }));
+        },
+        sendDirectives: function(directiveType, confirmSlotName, updatedIntent) {
+            console.log('Calling succeed with directives');
+
+            if (updatedIntent) {
+                this._context.succeed(buildSpeechletResponse({
+                    session: this._session,
+                    directives: [{ type: directiveType, confirmSlot: confirmSlotName, updatedIntent: updatedIntent }],
+                    shouldEndSession: false
+                }));
+
+            } else {
+                this._context.succeed(buildSpeechletResponse({
+                    session: this._session,
+                    directives: [{ type: directiveType }],
+                    shouldEndSession: false
+                }));
+            }
         }
     };
 })();

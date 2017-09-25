@@ -1,0 +1,1175 @@
+{
+  "intents": [
+    {
+      "name": "AMAZON.CancelIntent",
+      "samples": []
+    },
+    {
+      "name": "AMAZON.HelpIntent",
+      "samples": []
+    },
+    {
+      "name": "AMAZON.MoreIntent",
+      "samples": []
+    },
+    {
+      "name": "AMAZON.NavigateHomeIntent",
+      "samples": []
+    },
+    {
+      "name": "AMAZON.NavigateSettingsIntent",
+      "samples": []
+    },
+    {
+      "name": "AMAZON.NextIntent",
+      "samples": []
+    },
+    {
+      "name": "AMAZON.PageDownIntent",
+      "samples": []
+    },
+    {
+      "name": "AMAZON.PageUpIntent",
+      "samples": []
+    },
+    {
+      "name": "AMAZON.PreviousIntent",
+      "samples": []
+    },
+    {
+      "name": "AMAZON.ScrollDownIntent",
+      "samples": []
+    },
+    {
+      "name": "AMAZON.ScrollLeftIntent",
+      "samples": []
+    },
+    {
+      "name": "AMAZON.ScrollRightIntent",
+      "samples": []
+    },
+    {
+      "name": "AMAZON.ScrollUpIntent",
+      "samples": []
+    },
+    {
+      "name": "AMAZON.StopIntent",
+      "samples": []
+    },
+    {
+      "name": "ArtistIntent",
+      "samples": [
+        "{RoomName} play artist {ArtistName}",
+        "Play artist {ArtistName} in the {RoomName}",
+        "Play artist {ArtistName} "
+      ],
+      "slots": [
+        {
+          "name": "ArtistName",
+          "type": "AMAZON.MusicGroup",
+          "samples": [
+            "{ArtistName} "
+          ]
+        },
+        {
+          "name": "RoomName",
+          "type": "ROOMS",
+          "samples": [
+            "{RoomName} "
+          ]
+        }
+      ]
+    },
+    {
+      "name": "FavoriteIntent",
+      "samples": [
+        "play favorite {FavoriteName} in the {RoomName} ",
+        "{RoomName} play favorite {FavoriteName} ",
+        "play favorite {FavoriteName} "
+      ],
+      "slots": [
+        {
+          "name": "FavoriteName",
+          "type": "FAVORITES",
+          "samples": [
+            "{FavoriteName} "
+          ]
+        },
+        {
+          "name": "RoomName",
+          "type": "ROOMS",
+          "samples": [
+            "{RoomName}"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "GroupIntent",
+      "samples": [
+        "add {RoomName} to {GroupRoomName}"
+      ],
+      "slots": [
+        {
+          "name": "RoomName",
+          "type": "ROOMS",
+          "samples": [
+            "{RoomName} "
+          ]
+        },
+        {
+          "name": "GroupRoomName",
+          "type": "ROOMS",
+          "samples": [
+            "{GroupRoomName} "
+          ]
+        }
+      ]
+    },
+    {
+      "name": "HelpIntent",
+      "samples": [
+        "help",
+        "help me",
+        "what can I ask you",
+        "get help",
+        "to help",
+        "to help me",
+        "what commands can I ask",
+        "what commands can I say",
+        "what can I do",
+        "what can I use this for",
+        "what questions can I ask",
+        "what can you do",
+        "what do you do",
+        "how do I use you",
+        "how can I use you",
+        "what can you tell me"
+      ],
+      "slots": []
+    },
+    {
+      "name": "NextSongIntent",
+      "samples": [
+        "next song",
+        "play next song",
+        "skip song",
+        "skip this",
+        "{RoomName} skip this",
+        "{RoomName} skip song",
+        "{RoomName} play next song",
+        "{RoomName} next song"
+      ],
+      "slots": [
+        {
+          "name": "RoomName",
+          "type": "ROOMS",
+          "samples": [
+            "{RoomName}"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "PauseIntent",
+      "samples": [
+        "pause",
+        "pause all"
+      ],
+      "slots": []
+    },
+    {
+      "name": "PresetIntent",
+      "samples": [
+        "play preset {PresetName}",
+        "preset {PresetName}"
+      ],
+      "slots": [
+        {
+          "name": "PresetName",
+          "type": "PRESETS",
+          "samples": [
+            "{PresetName} "
+          ]
+        }
+      ]
+    },
+    {
+      "name": "ResumeIntent",
+      "samples": [
+        "resume",
+        "resume playback",
+        "resume music"
+      ],
+      "slots": []
+    },
+    {
+      "name": "RoomVolDownIntent",
+      "samples": [
+        "{RoomName} volume down"
+      ],
+      "slots": [
+        {
+          "name": "RoomName",
+          "type": "ROOMS",
+          "samples": [
+            "{RoomName}"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "RoomVolUpIntent",
+      "samples": [
+        "{RoomName} volume up"
+      ],
+      "slots": [
+        {
+          "name": "RoomName",
+          "type": "ROOMS",
+          "samples": [
+            "{RoomName}"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "SleepTimerIntent",
+      "samples": [
+        "set {RoomName} sleep timer for {TimerLength} hours",
+        "set {RoomName} sleep timer for {TimerLength} hour",
+        "set {RoomName} timer for {TimerLength} hours",
+        "set {RoomName} timer for {TimerLength} hour"
+      ],
+      "slots": [
+        {
+          "name": "RoomName",
+          "type": "ROOMS",
+          "samples": [
+            "{RoomName}"
+          ]
+        },
+        {
+          "name": "TimerLength",
+          "type": "AMAZON.NUMBER",
+          "samples": [
+            "{TimerLength} minutes"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "StationIntent",
+      "samples": [
+        "Play station {StationName} in the {RoomName}",
+        "Play Pandora station {StationName} in the {RoomName}",
+        "{RoomName} play station {StationName}",
+        "{RoomName} play pandora station {StationName}",
+        "play station {StationName} ",
+        "play pandora station {StationName} "
+      ],
+      "slots": [
+        {
+          "name": "StationName",
+          "type": "AMAZON.MusicGroup",
+          "samples": [
+            "{StationName} "
+          ]
+        },
+        {
+          "name": "RoomName",
+          "type": "ROOMS",
+          "samples": [
+            "{RoomName} "
+          ]
+        }
+      ]
+    },
+    {
+      "name": "ThankYouIntent",
+      "samples": [
+        "thanks",
+        "thank you"
+      ],
+      "slots": []
+    },
+    {
+      "name": "UngroupIntent",
+      "samples": [
+        "ungroup {RoomName}",
+        "isolate {RoomName}"
+      ],
+      "slots": [
+        {
+          "name": "RoomName",
+          "type": "ROOMS",
+          "samples": [
+            "{RoomName}"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "VolumeIntent",
+      "samples": [
+        "{RoomName} volume {Volume}",
+        "{RoomName} set volume to {Volume}",
+        "{RoomName} set volume {Volume}"
+      ],
+      "slots": [
+        {
+          "name": "Volume",
+          "type": "AMAZON.NUMBER",
+          "samples": [
+            "{Volume}"
+          ]
+        },
+        {
+          "name": "RoomName",
+          "type": "ROOMS",
+          "samples": [
+            "{RoomName}"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "WhatsPlayingIntent",
+      "samples": [
+        "what's playing",
+        "what is playing",
+        "status"
+      ],
+      "slots": []
+    }
+  ],
+  "types": [
+    {
+      "name": "FAVORITES",
+      "values": [
+        {
+          "id": null,
+          "name": {
+            "value": "15 - The Pulse",
+            "synonyms": []
+          }
+        },
+        {
+          "id": null,
+          "name": {
+            "value": "781 - Holly",
+            "synonyms": []
+          }
+        },
+        {
+          "id": null,
+          "name": {
+            "value": "92.5",
+            "synonyms": []
+          }
+        },
+        {
+          "id": null,
+          "name": {
+            "value": "Adele Radio",
+            "synonyms": []
+          }
+        },
+        {
+          "id": null,
+          "name": {
+            "value": "Andy Grammer Radio",
+            "synonyms": []
+          }
+        },
+        {
+          "id": null,
+          "name": {
+            "value": "Barry White Radio",
+            "synonyms": []
+          }
+        },
+        {
+          "id": null,
+          "name": {
+            "value": "Calm Meditation Radio",
+            "synonyms": []
+          }
+        },
+        {
+          "id": null,
+          "name": {
+            "value": "Chinese Traditional Music",
+            "synonyms": []
+          }
+        },
+        {
+          "id": null,
+          "name": {
+            "value": "Christmas Playlist",
+            "synonyms": []
+          }
+        },
+        {
+          "id": null,
+          "name": {
+            "value": "Colbie Caillat Radio",
+            "synonyms": []
+          }
+        },
+        {
+          "id": null,
+          "name": {
+            "value": "Dance Radio - 89.5",
+            "synonyms": []
+          }
+        },
+        {
+          "id": null,
+          "name": {
+            "value": "Disney Children's Radio",
+            "synonyms": []
+          }
+        },
+        {
+          "id": null,
+          "name": {
+            "value": "Disney lullabies",
+            "synonyms": []
+          }
+        },
+        {
+          "id": null,
+          "name": {
+            "value": "Happy Radio",
+            "synonyms": []
+          }
+        },
+        {
+          "id": null,
+          "name": {
+            "value": "Italian Traditional Radio",
+            "synonyms": []
+          }
+        },
+        {
+          "id": null,
+          "name": {
+            "value": "John Williams and Boston Pops Radio",
+            "synonyms": []
+          }
+        },
+        {
+          "id": null,
+          "name": {
+            "value": "Journey Radio",
+            "synonyms": []
+          }
+        },
+        {
+          "id": null,
+          "name": {
+            "value": "Mannheim Steamroller",
+            "synonyms": []
+          }
+        },
+        {
+          "id": null,
+          "name": {
+            "value": "Meditation",
+            "synonyms": []
+          }
+        },
+        {
+          "id": null,
+          "name": {
+            "value": "Omi Radio",
+            "synonyms": []
+          }
+        },
+        {
+          "id": null,
+          "name": {
+            "value": "Radio Italy Live",
+            "synonyms": []
+          }
+        },
+        {
+          "id": null,
+          "name": {
+            "value": "Radio LatteMiele",
+            "synonyms": []
+          }
+        },
+        {
+          "id": null,
+          "name": {
+            "value": "Security Alarm",
+            "synonyms": []
+          }
+        },
+        {
+          "id": null,
+          "name": {
+            "value": "Sheryl Crow Radio",
+            "synonyms": []
+          }
+        },
+        {
+          "id": null,
+          "name": {
+            "value": "Spa Radio",
+            "synonyms": []
+          }
+        },
+        {
+          "id": null,
+          "name": {
+            "value": "The Memory Of Trees",
+            "synonyms": []
+          }
+        },
+        {
+          "id": null,
+          "name": {
+            "value": "The Nutcracker Radio",
+            "synonyms": []
+          }
+        },
+        {
+          "id": null,
+          "name": {
+            "value": "The Rippingtons Radio",
+            "synonyms": []
+          }
+        },
+        {
+          "id": null,
+          "name": {
+            "value": "Today's Hits Radio",
+            "synonyms": []
+          }
+        }
+      ]
+    },
+    {
+      "name": "PRESETS",
+      "values": [
+        {
+          "id": null,
+          "name": {
+            "value": "Happy",
+            "synonyms": []
+          }
+        },
+        {
+          "id": null,
+          "name": {
+            "value": "Spa",
+            "synonyms": []
+          }
+        },
+        {
+          "id": null,
+          "name": {
+            "value": "Sunday",
+            "synonyms": []
+          }
+        },
+        {
+          "id": null,
+          "name": {
+            "value": "Calm",
+            "synonyms": []
+          }
+        },
+        {
+          "id": null,
+          "name": {
+            "value": "Morning",
+            "synonyms": []
+          }
+        },
+        {
+          "id": null,
+          "name": {
+            "value": "Lullabies",
+            "synonyms": []
+          }
+        },
+        {
+          "id": null,
+          "name": {
+            "value": "Chinese",
+            "synonyms": []
+          }
+        },
+        {
+          "id": null,
+          "name": {
+            "value": "Test",
+            "synonyms": []
+          }
+        },
+        {
+          "id": null,
+          "name": {
+            "value": "Holly",
+            "synonyms": []
+          }
+        },
+        {
+          "id": null,
+          "name": {
+            "value": "Nutcracker",
+            "synonyms": []
+          }
+        },
+        {
+          "id": null,
+          "name": {
+            "value": "Mannheim",
+            "synonyms": []
+          }
+        },
+        {
+          "id": null,
+          "name": {
+            "value": "Outside",
+            "synonyms": []
+          }
+        },
+        {
+          "id": null,
+          "name": {
+            "value": "Security Alarm",
+            "synonyms": []
+          }
+        }
+      ]
+    },
+    {
+      "name": "ROOMS",
+      "values": [
+        {
+          "id": null,
+          "name": {
+            "value": "bathroom",
+            "synonyms": []
+          }
+        },
+        {
+          "id": null,
+          "name": {
+            "value": "living room",
+            "synonyms": []
+          }
+        },
+        {
+          "id": null,
+          "name": {
+            "value": "office",
+            "synonyms": []
+          }
+        },
+        {
+          "id": null,
+          "name": {
+            "value": "back porch",
+            "synonyms": []
+          }
+        },
+        {
+          "id": null,
+          "name": {
+            "value": "kitchen",
+            "synonyms": []
+          }
+        },
+        {
+          "id": null,
+          "name": {
+            "value": "side yard",
+            "synonyms": []
+          }
+        }
+      ]
+    }
+  ],
+  "prompts": [
+    {
+      "id": "Confirm.Intent-ArtistIntent",
+      "promptVersion": "1.0",
+      "definitionVersion": "1.0",
+      "variations": [
+        {
+          "type": "PlainText",
+          "value": "Are you sure you want to play artist {ArtistName} in the {RoomName}"
+        }
+      ]
+    },
+    {
+      "id": "Elicit.Intent-ArtistIntent.IntentSlot-ArtistName",
+      "promptVersion": "1.0",
+      "definitionVersion": "1.0",
+      "variations": [
+        {
+          "type": "PlainText",
+          "value": "Who would you like to play"
+        }
+      ]
+    },
+    {
+      "id": "Elicit.Intent-ArtistIntent.IntentSlot-RoomName",
+      "promptVersion": "1.0",
+      "definitionVersion": "1.0",
+      "variations": [
+        {
+          "type": "PlainText",
+          "value": "In which room would you like this to play"
+        }
+      ]
+    },
+    {
+      "id": "Confirm.Intent-FavoriteIntent",
+      "promptVersion": "1.0",
+      "definitionVersion": "1.0",
+      "variations": [
+        {
+          "type": "PlainText",
+          "value": "Are you sure you want to play favorite {FavoriteName} in the {RoomName} "
+        }
+      ]
+    },
+    {
+      "id": "Elicit.Intent-FavoriteIntent.IntentSlot-FavoriteName",
+      "promptVersion": "1.0",
+      "definitionVersion": "1.0",
+      "variations": [
+        {
+          "type": "PlainText",
+          "value": "which favorite would you like to play"
+        }
+      ]
+    },
+    {
+      "id": "Elicit.Intent-FavoriteIntent.IntentSlot-RoomName",
+      "promptVersion": "1.0",
+      "definitionVersion": "1.0",
+      "variations": [
+        {
+          "type": "PlainText",
+          "value": "In which room would you like this to play"
+        }
+      ]
+    },
+    {
+      "id": "Elicit.Intent-GroupIntent.IntentSlot-RoomName",
+      "promptVersion": "1.0",
+      "definitionVersion": "1.0",
+      "variations": [
+        {
+          "type": "PlainText",
+          "value": "Which room do you want to add?"
+        }
+      ]
+    },
+    {
+      "id": "Elicit.Intent-GroupIntent.IntentSlot-GroupRoomName",
+      "promptVersion": "1.0",
+      "definitionVersion": "1.0",
+      "variations": [
+        {
+          "type": "PlainText",
+          "value": "Which room do you want to add it to?"
+        }
+      ]
+    },
+    {
+      "id": "Elicit.Intent-NextSongIntent.IntentSlot-RoomName",
+      "promptVersion": "1.0",
+      "definitionVersion": "1.0",
+      "variations": [
+        {
+          "type": "PlainText",
+          "value": "For which room"
+        }
+      ]
+    },
+    {
+      "id": "Elicit.Intent-PresetIntent.IntentSlot-PresetName",
+      "promptVersion": "1.0",
+      "definitionVersion": "1.0",
+      "variations": [
+        {
+          "type": "PlainText",
+          "value": "Which preset would you like to play?"
+        }
+      ]
+    },
+    {
+      "id": "Elicit.Intent-RoomVolDownIntent.IntentSlot-RoomName",
+      "promptVersion": "1.0",
+      "definitionVersion": "1.0",
+      "variations": [
+        {
+          "type": "PlainText",
+          "value": "For which room"
+        }
+      ]
+    },
+    {
+      "id": "Elicit.Intent-RoomVolUpIntent.IntentSlot-RoomName",
+      "promptVersion": "1.0",
+      "definitionVersion": "1.0",
+      "variations": [
+        {
+          "type": "PlainText",
+          "value": "For which room"
+        }
+      ]
+    },
+    {
+      "id": "Elicit.Intent-SleepTimerIntent.IntentSlot-RoomName",
+      "promptVersion": "1.0",
+      "definitionVersion": "1.0",
+      "variations": [
+        {
+          "type": "PlainText",
+          "value": "For which room"
+        }
+      ]
+    },
+    {
+      "id": "Elicit.Intent-SleepTimerIntent.IntentSlot-TimerLength",
+      "promptVersion": "1.0",
+      "definitionVersion": "1.0",
+      "variations": [
+        {
+          "type": "PlainText",
+          "value": "How long do you want to set the sleep timer for?"
+        }
+      ]
+    },
+    {
+      "id": "Confirm.Intent-StationIntent",
+      "promptVersion": "1.0",
+      "definitionVersion": "1.0",
+      "variations": [
+        {
+          "type": "PlainText",
+          "value": "Are you sure you want to play Pandora station {StationName} in the {RoomName} "
+        }
+      ]
+    },
+    {
+      "id": "Elicit.Intent-StationIntent.IntentSlot-StationName",
+      "promptVersion": "1.0",
+      "definitionVersion": "1.0",
+      "variations": [
+        {
+          "type": "PlainText",
+          "value": "Which Pandora station would you like to play"
+        }
+      ]
+    },
+    {
+      "id": "Elicit.Intent-StationIntent.IntentSlot-RoomName",
+      "promptVersion": "1.0",
+      "definitionVersion": "1.0",
+      "variations": [
+        {
+          "type": "PlainText",
+          "value": "In which room would you like this to play"
+        }
+      ]
+    },
+    {
+      "id": "Elicit.Intent-UngroupIntent.IntentSlot-RoomName",
+      "promptVersion": "1.0",
+      "definitionVersion": "1.0",
+      "variations": [
+        {
+          "type": "PlainText",
+          "value": "Which room do you want to ungroup"
+        }
+      ]
+    },
+    {
+      "id": "Confirm.Intent-VolumeIntent",
+      "promptVersion": "1.0",
+      "definitionVersion": "1.0",
+      "variations": [
+        {
+          "type": "PlainText",
+          "value": "Are you sure you want to set the volume for the {RoomName} to {Volume}?"
+        }
+      ]
+    },
+    {
+      "id": "Elicit.Intent-VolumeIntent.IntentSlot-Volume",
+      "promptVersion": "1.0",
+      "definitionVersion": "1.0",
+      "variations": [
+        {
+          "type": "PlainText",
+          "value": "At what volume level"
+        }
+      ]
+    },
+    {
+      "id": "Elicit.Intent-VolumeIntent.IntentSlot-RoomName",
+      "promptVersion": "1.0",
+      "definitionVersion": "1.0",
+      "variations": [
+        {
+          "type": "PlainText",
+          "value": "For which room"
+        }
+      ]
+    }
+  ],
+  "dialog": {
+    "version": "1.0",
+    "intents": [
+      {
+        "name": "ArtistIntent",
+        "confirmationRequired": true,
+        "prompts": {
+          "confirm": "Confirm.Intent-ArtistIntent"
+        },
+        "slots": [
+          {
+            "name": "ArtistName",
+            "type": "AMAZON.MusicGroup",
+            "elicitationRequired": true,
+            "confirmationRequired": false,
+            "prompts": {
+              "elicit": "Elicit.Intent-ArtistIntent.IntentSlot-ArtistName"
+            }
+          },
+          {
+            "name": "RoomName",
+            "type": "ROOMS",
+            "elicitationRequired": true,
+            "confirmationRequired": false,
+            "prompts": {
+              "elicit": "Elicit.Intent-ArtistIntent.IntentSlot-RoomName"
+            }
+          }
+        ]
+      },
+      {
+        "name": "FavoriteIntent",
+        "confirmationRequired": true,
+        "prompts": {
+          "confirm": "Confirm.Intent-FavoriteIntent"
+        },
+        "slots": [
+          {
+            "name": "FavoriteName",
+            "type": "FAVORITES",
+            "elicitationRequired": true,
+            "confirmationRequired": false,
+            "prompts": {
+              "elicit": "Elicit.Intent-FavoriteIntent.IntentSlot-FavoriteName"
+            }
+          },
+          {
+            "name": "RoomName",
+            "type": "ROOMS",
+            "elicitationRequired": true,
+            "confirmationRequired": false,
+            "prompts": {
+              "elicit": "Elicit.Intent-FavoriteIntent.IntentSlot-RoomName"
+            }
+          }
+        ]
+      },
+      {
+        "name": "GroupIntent",
+        "confirmationRequired": false,
+        "prompts": {},
+        "slots": [
+          {
+            "name": "RoomName",
+            "type": "ROOMS",
+            "elicitationRequired": true,
+            "confirmationRequired": false,
+            "prompts": {
+              "elicit": "Elicit.Intent-GroupIntent.IntentSlot-RoomName"
+            }
+          },
+          {
+            "name": "GroupRoomName",
+            "type": "ROOMS",
+            "elicitationRequired": true,
+            "confirmationRequired": false,
+            "prompts": {
+              "elicit": "Elicit.Intent-GroupIntent.IntentSlot-GroupRoomName"
+            }
+          }
+        ]
+      },
+      {
+        "name": "NextSongIntent",
+        "confirmationRequired": false,
+        "prompts": {},
+        "slots": [
+          {
+            "name": "RoomName",
+            "type": "ROOMS",
+            "elicitationRequired": true,
+            "confirmationRequired": false,
+            "prompts": {
+              "elicit": "Elicit.Intent-NextSongIntent.IntentSlot-RoomName"
+            }
+          }
+        ]
+      },
+      {
+        "name": "PresetIntent",
+        "confirmationRequired": false,
+        "prompts": {},
+        "slots": [
+          {
+            "name": "PresetName",
+            "type": "PRESETS",
+            "elicitationRequired": true,
+            "confirmationRequired": false,
+            "prompts": {
+              "elicit": "Elicit.Intent-PresetIntent.IntentSlot-PresetName"
+            }
+          }
+        ]
+      },
+      {
+        "name": "RoomVolDownIntent",
+        "confirmationRequired": false,
+        "prompts": {},
+        "slots": [
+          {
+            "name": "RoomName",
+            "type": "ROOMS",
+            "elicitationRequired": true,
+            "confirmationRequired": false,
+            "prompts": {
+              "elicit": "Elicit.Intent-RoomVolDownIntent.IntentSlot-RoomName"
+            }
+          }
+        ]
+      },
+      {
+        "name": "RoomVolUpIntent",
+        "confirmationRequired": false,
+        "prompts": {},
+        "slots": [
+          {
+            "name": "RoomName",
+            "type": "ROOMS",
+            "elicitationRequired": true,
+            "confirmationRequired": false,
+            "prompts": {
+              "elicit": "Elicit.Intent-RoomVolUpIntent.IntentSlot-RoomName"
+            }
+          }
+        ]
+      },
+      {
+        "name": "SleepTimerIntent",
+        "confirmationRequired": false,
+        "prompts": {},
+        "slots": [
+          {
+            "name": "RoomName",
+            "type": "ROOMS",
+            "elicitationRequired": true,
+            "confirmationRequired": false,
+            "prompts": {
+              "elicit": "Elicit.Intent-SleepTimerIntent.IntentSlot-RoomName"
+            }
+          },
+          {
+            "name": "TimerLength",
+            "type": "AMAZON.NUMBER",
+            "elicitationRequired": true,
+            "confirmationRequired": false,
+            "prompts": {
+              "elicit": "Elicit.Intent-SleepTimerIntent.IntentSlot-TimerLength"
+            }
+          }
+        ]
+      },
+      {
+        "name": "StationIntent",
+        "confirmationRequired": true,
+        "prompts": {
+          "confirm": "Confirm.Intent-StationIntent"
+        },
+        "slots": [
+          {
+            "name": "StationName",
+            "type": "AMAZON.MusicGroup",
+            "elicitationRequired": true,
+            "confirmationRequired": false,
+            "prompts": {
+              "elicit": "Elicit.Intent-StationIntent.IntentSlot-StationName"
+            }
+          },
+          {
+            "name": "RoomName",
+            "type": "ROOMS",
+            "elicitationRequired": true,
+            "confirmationRequired": false,
+            "prompts": {
+              "elicit": "Elicit.Intent-StationIntent.IntentSlot-RoomName"
+            }
+          }
+        ]
+      },
+      {
+        "name": "UngroupIntent",
+        "confirmationRequired": false,
+        "prompts": {},
+        "slots": [
+          {
+            "name": "RoomName",
+            "type": "ROOMS",
+            "elicitationRequired": true,
+            "confirmationRequired": false,
+            "prompts": {
+              "elicit": "Elicit.Intent-UngroupIntent.IntentSlot-RoomName"
+            }
+          }
+        ]
+      },
+      {
+        "name": "VolumeIntent",
+        "confirmationRequired": true,
+        "prompts": {
+          "confirm": "Confirm.Intent-VolumeIntent"
+        },
+        "slots": [
+          {
+            "name": "Volume",
+            "type": "AMAZON.NUMBER",
+            "elicitationRequired": true,
+            "confirmationRequired": false,
+            "prompts": {
+              "elicit": "Elicit.Intent-VolumeIntent.IntentSlot-Volume"
+            }
+          },
+          {
+            "name": "RoomName",
+            "type": "ROOMS",
+            "elicitationRequired": true,
+            "confirmationRequired": false,
+            "prompts": {
+              "elicit": "Elicit.Intent-VolumeIntent.IntentSlot-RoomName"
+            }
+          }
+        ]
+      }
+    ]
+  }
+}
